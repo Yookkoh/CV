@@ -1,0 +1,264 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --font-sans: -apple-system, "BlinkMacSystemFont", "SF Pro Display",
+    "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+:root {
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+  --muted: #e8e8ed;
+  --muted-foreground: #86868b;
+  --border: rgba(0, 0, 0, 0.06);
+  --accent: #1d1d1f;
+  --accent-foreground: #f5f5f7;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #f5f5f7;
+  --muted: #1c1c1e;
+  --muted-foreground: #98989d;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #f5f5f7;
+  --accent-foreground: #1d1d1f;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/* ======== Glass morphism ======== */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.03),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    0 12px 40px rgba(0, 0, 0, 0.04);
+}
+
+.dark .glass {
+  background: rgba(28, 28, 30, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 16px 56px rgba(0, 0, 0, 0.06);
+}
+
+.dark .glass-strong {
+  background: rgba(28, 28, 30, 0.85);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.05),
+    0 4px 16px rgba(0, 0, 0, 0.25),
+    0 16px 56px rgba(0, 0, 0, 0.2);
+}
+
+/* ======== Animated gradient background ======== */
+@keyframes gradient-drift {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.animated-gradient {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(120, 119, 198, 0.12), transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 177, 153, 0.1), transparent 60%),
+    radial-gradient(ellipse at 40% 80%, rgba(96, 165, 250, 0.08), transparent 60%);
+  background-size: 200% 200%;
+  animation: gradient-drift 20s ease infinite;
+}
+
+.dark .animated-gradient {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(120, 119, 198, 0.15), transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 177, 153, 0.08), transparent 60%),
+    radial-gradient(ellipse at 40% 80%, rgba(96, 165, 250, 0.1), transparent 60%);
+  background-size: 200% 200%;
+  animation: gradient-drift 20s ease infinite;
+}
+
+/* ======== Typography ======== */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.025em;
+}
+
+/* ======== Prose for markdown ======== */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--foreground);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.prose h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose p {
+  margin-bottom: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.prose li {
+  margin-bottom: 0.25rem;
+  color: var(--muted-foreground);
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* ======== Glass hover ======== */
+.glass-hover {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.3s ease;
+}
+
+.glass-hover:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 16px 48px rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-hover:hover {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 16px 48px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ======== Floating animation ======== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ======== Smooth scrolling ======== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ======== Scrollbar ======== */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ======== Selection ======== */
+::selection {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.dark ::selection {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ======== Print styles (for resume PDF) ======== */
+@media print {
+  body {
+    background: white !important;
+    color: #1d1d1f !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print\:hidden,
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  #resume {
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    min-height: auto !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}

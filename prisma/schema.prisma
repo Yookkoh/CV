@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id             String      @id @default(cuid())
+  fullName       String
+  headline       String
+  summary        String      @db.Text
+  location       String?
+  email          String
+  phone          String?
+  websiteUrl     String?
+  linkedinUrl    String?
+  githubUrl      String?
+  profilePhotoId String?
+  profilePhoto   MediaAsset? @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
+  updatedAt      DateTime    @updatedAt
+}
+
+model About {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+model Experience {
+  id             String    @id @default(cuid())
+  company        String
+  roleTitle      String
+  location       String?
+  startDate      DateTime
+  endDate        DateTime?
+  employmentType String?
+  description    String?   @db.Text
+  highlights     String[]
+  techTags       String[]
+  order          Int       @default(0)
+  isPublished    Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model SkillCategory {
+  id     String  @id @default(cuid())
+  name   String
+  order  Int     @default(0)
+  skills Skill[]
+}
+
+model Skill {
+  id         String        @id @default(cuid())
+  categoryId String
+  category   SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name       String
+  level      Int?
+  tags       String[]
+  order      Int           @default(0)
+}
+
+model Project {
+  id               String      @id @default(cuid())
+  slug             String      @unique
+  title            String
+  shortDescription String
+  content          String      @db.Text
+  techTags         String[]
+  repoUrl          String?
+  liveUrl          String?
+  featured         Boolean     @default(false)
+  coverAssetId     String?
+  coverAsset       MediaAsset? @relation("ProjectCover", fields: [coverAssetId], references: [id])
+  order            Int         @default(0)
+  isPublished      Boolean     @default(true)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  type      String
+  alt       String?
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+
+  profilePhotos Profile[]      @relation("ProfilePhoto")
+  projectCovers Project[]      @relation("ProjectCover")
+  siteOgImages  SiteSettings[] @relation("OgImage")
+}
+
+model SiteSettings {
+  id              String      @id @default(cuid())
+  siteTitle       String
+  siteDescription String      @db.Text
+  ogImageAssetId  String?
+  ogImage         MediaAsset? @relation("OgImage", fields: [ogImageAssetId], references: [id])
+  updatedAt       DateTime    @updatedAt
+}
