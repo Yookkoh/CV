@@ -5,11 +5,25 @@ import { AdminFormField } from "@/components/admin/AdminFormField";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 
 export default async function AdminSettingsPage() {
-  const settings = await prisma.siteSettings.findFirst();
+  let dbError = false;
+  let settings: Awaited<ReturnType<typeof prisma.siteSettings.findFirst>> = null;
+
+  try {
+    settings = await prisma.siteSettings.findFirst();
+  } catch (err) {
+    dbError = true;
+    console.error("[db] Admin settings query failed. Check DATABASE_URL.", err);
+  }
 
   return (
     <div>
       <h1 className="text-2xl font-bold tracking-tight mb-6">Site Settings</h1>
+      {dbError && (
+        <p className="text-sm text-muted-foreground mb-4">
+          The database is not configured or unreachable. Set `DATABASE_URL` and run
+          migrations to enable editing.
+        </p>
+      )}
       <GlassCard>
         <form action={updateSettings} className="space-y-4">
           <AdminFormField

@@ -2,6 +2,11 @@ import { prisma } from "@/lib/db";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { SkillsContent } from "./SkillsContent";
 import type { Metadata } from "next";
+import type { Prisma } from "@prisma/client";
+
+type CategoryWithSkills = Prisma.SkillCategoryGetPayload<{
+  include: { skills: true };
+}>;
 
 export const metadata: Metadata = {
   title: "Skills | Portfolio",
@@ -9,14 +14,20 @@ export const metadata: Metadata = {
 };
 
 export default async function SkillsPage() {
-  const categories = await prisma.skillCategory.findMany({
-    orderBy: { order: "asc" },
-    include: {
-      skills: {
-        orderBy: { order: "asc" },
+  let categories: CategoryWithSkills[] = [];
+
+  try {
+    categories = await prisma.skillCategory.findMany({
+      orderBy: { order: "asc" },
+      include: {
+        skills: {
+          orderBy: { order: "asc" },
+        },
       },
-    },
-  });
+    });
+  } catch (err) {
+    console.error("[db] Skills page query failed. Check DATABASE_URL.", err);
+  }
 
   return (
     <PageTransition>

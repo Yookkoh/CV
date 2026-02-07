@@ -9,10 +9,16 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  const projects = await prisma.project.findMany({
-    where: { isPublished: true },
-    orderBy: { order: "asc" },
-  });
+  let projects: Awaited<ReturnType<typeof prisma.project.findMany>> = [];
+
+  try {
+    projects = await prisma.project.findMany({
+      where: { isPublished: true },
+      orderBy: { order: "asc" },
+    });
+  } catch (err) {
+    console.error("[db] Projects page query failed. Check DATABASE_URL.", err);
+  }
 
   return (
     <PageTransition>

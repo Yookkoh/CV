@@ -9,10 +9,16 @@ export const metadata: Metadata = {
 };
 
 export default async function ExperiencePage() {
-  const experiences = await prisma.experience.findMany({
-    where: { isPublished: true },
-    orderBy: { order: "asc" },
-  });
+  let experiences: Awaited<ReturnType<typeof prisma.experience.findMany>> = [];
+
+  try {
+    experiences = await prisma.experience.findMany({
+      where: { isPublished: true },
+      orderBy: { order: "asc" },
+    });
+  } catch (err) {
+    console.error("[db] Experience page query failed. Check DATABASE_URL.", err);
+  }
 
   return (
     <PageTransition>

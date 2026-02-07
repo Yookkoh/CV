@@ -9,7 +9,28 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const profile = await prisma.profile.findFirst();
+  let dbError = false;
+  let profile: Awaited<ReturnType<typeof prisma.profile.findFirst>> = null;
+
+  try {
+    profile = await prisma.profile.findFirst();
+  } catch (err) {
+    dbError = true;
+    console.error("[db] Contact page query failed. Check DATABASE_URL.", err);
+  }
+
+  if (dbError) {
+    return (
+      <PageTransition>
+        <div className="text-center py-20">
+          <p className="text-muted-foreground">
+            Contact info is unavailable right now. The database is not configured
+            or unreachable.
+          </p>
+        </div>
+      </PageTransition>
+    );
+  }
 
   if (!profile) {
     return (

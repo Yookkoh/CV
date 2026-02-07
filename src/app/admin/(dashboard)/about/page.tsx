@@ -5,11 +5,25 @@ import { AdminFormField } from "@/components/admin/AdminFormField";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 
 export default async function AdminAboutPage() {
-  const about = await prisma.about.findFirst();
+  let dbError = false;
+  let about: Awaited<ReturnType<typeof prisma.about.findFirst>> = null;
+
+  try {
+    about = await prisma.about.findFirst();
+  } catch (err) {
+    dbError = true;
+    console.error("[db] Admin about query failed. Check DATABASE_URL.", err);
+  }
 
   return (
     <div>
       <h1 className="text-2xl font-bold tracking-tight mb-6">About</h1>
+      {dbError && (
+        <p className="text-sm text-muted-foreground mb-4">
+          The database is not configured or unreachable. Set `DATABASE_URL` and run
+          migrations to enable editing.
+        </p>
+      )}
       <GlassCard>
         <form action={updateAbout} className="space-y-4">
           <AdminFormField

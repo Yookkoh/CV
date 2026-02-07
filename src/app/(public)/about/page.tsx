@@ -9,7 +9,28 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const about = await prisma.about.findFirst();
+  let dbError = false;
+  let about: Awaited<ReturnType<typeof prisma.about.findFirst>> = null;
+
+  try {
+    about = await prisma.about.findFirst();
+  } catch (err) {
+    dbError = true;
+    console.error("[db] About page query failed. Check DATABASE_URL.", err);
+  }
+
+  if (dbError) {
+    return (
+      <PageTransition>
+        <div className="text-center py-20">
+          <p className="text-muted-foreground">
+            About content is unavailable right now. The database is not configured
+            or unreachable.
+          </p>
+        </div>
+      </PageTransition>
+    );
+  }
 
   if (!about) {
     return (

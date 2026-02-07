@@ -11,13 +11,24 @@ import {
 } from "lucide-react";
 
 export default async function AdminDashboardPage() {
-  const [profileCount, experienceCount, skillCount, projectCount] =
-    await Promise.all([
-      prisma.profile.count(),
-      prisma.experience.count(),
-      prisma.skill.count(),
-      prisma.project.count(),
-    ]);
+  let dbError = false;
+  let profileCount = 0;
+  let experienceCount = 0;
+  let skillCount = 0;
+  let projectCount = 0;
+
+  try {
+    [profileCount, experienceCount, skillCount, projectCount] =
+      await Promise.all([
+        prisma.profile.count(),
+        prisma.experience.count(),
+        prisma.skill.count(),
+        prisma.project.count(),
+      ]);
+  } catch (err) {
+    dbError = true;
+    console.error("[db] Admin dashboard query failed. Check DATABASE_URL.", err);
+  }
 
   const sections = [
     {
@@ -67,6 +78,12 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold tracking-tight mb-6">Dashboard</h1>
+      {dbError && (
+        <p className="text-sm text-muted-foreground mb-4">
+          The database is not configured or unreachable. Set `DATABASE_URL` and run
+          migrations to enable the admin dashboard.
+        </p>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {sections.map((s) => {
           const Icon = s.icon;

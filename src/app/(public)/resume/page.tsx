@@ -4,6 +4,11 @@ import { PageTransition } from "@/components/layout/PageTransition";
 import { ResumeActions } from "./ResumeActions";
 import { Mail, Phone, MapPin, Linkedin, Github, Globe } from "lucide-react";
 import type { Metadata } from "next";
+import type { Prisma } from "@prisma/client";
+
+type CategoryWithSkills = Prisma.SkillCategoryGetPayload<{
+  include: { skills: true };
+}>;
 
 export const metadata: Metadata = {
   title: "Resume | Portfolio",
@@ -11,8 +16,15 @@ export const metadata: Metadata = {
 };
 
 export default async function ResumePage() {
-  const [profile, experiences, categories, projects] = await Promise.all(
-    [
+  let dbError = false;
+
+  let profile: Awaited<ReturnType<typeof prisma.profile.findFirst>> = null;
+  let experiences: Awaited<ReturnType<typeof prisma.experience.findMany>> = [];
+  let categories: CategoryWithSkills[] = [];
+  let projects: Awaited<ReturnType<typeof prisma.project.findMany>> = [];
+
+  try {
+    [profile, experiences, categories, projects] = await Promise.all([
       prisma.profile.findFirst(),
       prisma.experience.findMany({
         where: { isPublished: true },
@@ -27,8 +39,24 @@ export default async function ResumePage() {
         orderBy: { order: "asc" },
         take: 4,
       }),
-    ]
-  );
+    ]);
+  } catch (err) {
+    dbError = true;
+    console.error("[db] Resume page query failed. Check DATABASE_URL.", err);
+  }
+
+  if (dbError) {
+    return (
+      <PageTransition>
+        <div className="text-center py-20">
+          <p className="text-muted-foreground">
+            Resume content is unavailable right now. The database is not configured
+            or unreachable.
+          </p>
+        </div>
+      </PageTransition>
+    );
+  }
 
   if (!profile) {
     return (
