@@ -11,10 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ResumePage() {
-  const [profile, about, experiences, categories, projects] = await Promise.all(
+  const [profile, experiences, categories, projects] = await Promise.all(
     [
       prisma.profile.findFirst(),
-      prisma.about.findFirst(),
       prisma.experience.findMany({
         where: { isPublished: true },
         orderBy: { order: "asc" },

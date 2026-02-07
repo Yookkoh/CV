@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/immutability */
+
 import { useEffect, useRef, useCallback } from "react";
 
 interface Dot {
@@ -168,7 +170,6 @@ export function DotGridBackground() {
           );
           const opacity = proximity * 0.25;
           ctx.beginPath();
-          ctx.moveTo(dots[i].x, dots[j].y);
           ctx.moveTo(dots[i].x, dots[i].y);
           ctx.lineTo(dots[j].x, dots[j].y);
           ctx.strokeStyle = isDark

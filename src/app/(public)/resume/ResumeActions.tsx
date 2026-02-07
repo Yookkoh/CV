@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { Download, Printer } from "lucide-react";
+import { Printer } from "lucide-react";
 
 export function ResumeActions() {
   function handlePrint() {

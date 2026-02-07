@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/db";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { AdminFormField } from "@/components/admin/AdminFormField";
 import { ProfileForm } from "./ProfileForm";
 
 export default async function AdminProfilePage() {
