@@ -24,6 +24,21 @@
 - Database on Neon or Supabase
 - Media storage on Cloudflare R2 or AWS S3
 
+## Netlify
+1) Push the repo to GitHub.
+2) Netlify: "Add new site" -> "Import an existing project" -> pick the GitHub repo.
+3) Build settings are in `netlify.toml`:
+- build command: `npm run build`
+- publish dir: `.next`
+4) Set environment variables in Netlify:
+- `DATABASE_URL`
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL` (your production site URL)
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD_HASH` (bcrypt hash; no escaping needed in Netlify UI)
+
+Note: `public/uploads` is not a durable storage target on Netlify. Use S3/R2 for uploads if you need persistence.
+
 ## Post-Deploy Checklist
 - Verify admin login works
 - Verify uploads work
