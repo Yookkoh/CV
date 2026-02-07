@@ -37,6 +37,8 @@
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD_HASH` (bcrypt hash; no escaping needed in Netlify UI)
 
+If Netlify build fails with a Prisma "outdated Prisma Client" message, ensure your build runs `prisma generate` (this repo's `npm run build` does).
+
 Note: `public/uploads` is not a durable storage target on Netlify. Use S3/R2 for uploads if you need persistence.
 
 ## Post-Deploy Checklist
