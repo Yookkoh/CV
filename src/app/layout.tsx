@@ -5,6 +5,10 @@ import { MobileDock } from "@/components/layout/MobileDock";
 import { DotGridBackground } from "@/components/layout/DotGridBackground";
 import { Footer } from "@/components/layout/Footer";
 
+// This app reads from a database (Prisma) on most routes. Force SSR so builds
+// don't require a live DB connection for static prerendering.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "John Doe | Full-Stack Developer",
   description:
